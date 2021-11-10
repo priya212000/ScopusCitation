@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+   <body>
+      <table>
+         {% for item in result %}
+            <tr>
+                {% for value in item %}
+                <td> {{ value }} </td>
+                {% endfor %}
+            </tr>
+         {% endfor %}
+      </table>
+   </body>
+</html>

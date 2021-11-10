@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+  pre_build:
+    commands:
+      - echo Nothing to do in the pre_build phase...
+  build:
+    commands:
+      - echo Running my python unit tests on `date`
+      - python -m unittest AuthorRetrieval.py  
+  post_build:
+    commands:
+      - echo Build completed on `date`

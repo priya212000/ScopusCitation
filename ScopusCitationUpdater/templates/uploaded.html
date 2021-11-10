@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+        integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script> -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> -->
+
+    <title>
+        Scopus Citation Updator
+    </title>
+
+
+    <style>
+        body {
+            background-color: #f6f6f6;
+        }
+
+
+
+        .icon {
+            border: #f6f6f6 solid 3px;
+            padding: 5px;
+        }
+
+
+        .Heading {
+            padding: 0px;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            align-items: center;
+            background-color: #163172;
+            color: #f6f6f6;
+            height: 100px;
+            font-size: 25px;
+        }
+
+        .Heading-light {
+            padding: 0px;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            align-items: center;
+            background-color: #1e56a0;
+            color: #f6f6f6;
+            height: 100px;
+            font-size: 25px;
+
+        }
+
+        .form-div {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            background-color: white;
+            height: auto;
+        }
+
+        .name-search {
+            border: 10px;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        .txt-input {
+            width: 100%;
+            border: none;
+            background-image: none;
+            background-color: transparent;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            border-bottom: #d6e4f0 solid 3px;
+
+        }
+
+
+        .btn-element {
+            text-align: right;
+            display: block;
+            margin-top: 53px;
+            margin-bottom: 53px;
+        }
+
+        .help {
+            font-size: x-small;
+        }
+
+        .element {
+            display: block;
+            margin-top: 53px;
+            margin-bottom: 53px;
+        }
+
+        .block {
+            padding: 10px;
+            display: block;
+            width: 50%;
+            float: left;
+            height: 100%;
+        }
+
+        .loading-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            display: inline-block;
+            z-index: 5;
+            position: fixed;
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(90deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $("#filehandled").submit(function () {
+                $('#wait_pls').css("visibility", "visible")
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#go").click(function () {
+                var radioValue = $("input[name='gender']:checked").val();
+                if(radioValue){
+                    
+                }
+                $.getJSON("http://localhost:5000/Search", {
+                        orcid: $('#ORCID').val(),
+                        inputoptions:radioValue
+                    },
+                    function (data) {
+                        if (data.result.stat === "success") {
+                            $('#src').empty()
+                            $('#src').append(`
+                        <div class="card" style=100%>
+                            <div class="card-body">
+                                <h4 class="card-title">` + data.result.indn + `</h4>
+                                <p class="card-text">Affiliation:<br>` + data.result.aff + `</p>
+                                <p class="card-text">Address:<br>` + data.result.addr + `</p>
+                                <p class="card-text">Citations:<br>` + data.result.cit + `</p>
+                                <p class="card-text">Areas Of Interest:<br>` + data.result.aoe + `</p>
+                            </div>
+                        </div>`)
+                        } else {
+                            alert("ID invalid")
+                        }
+                    });
+            })
+        })
+    </script>
+    
+    <script>
+        $(document).ready(function () {
+            $("#updateble").click(function () {
+                $.getJSON("http://localhost:5000/updateble", {
+                    },
+                    function (data) {
+                        if (data.result.stat === "success") {
+                            alert("Tables Updated")
+                        } else {
+                            alert("Update failed")
+                        }
+                    });
+            })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#table_interface").submit(function () {
+                $('#wait_pls').css("visibility", "visible")
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $("input[name='gender']").click(function(){
+                var radioValue = $("input[name='gender']:checked").val();
+                if(radioValue==="o"){
+                    $("input[name='ORCID']:text").attr('placeholder',"ORCID");
+                }
+                else if(radioValue==="a"){
+                    $("input[name='ORCID']:text").attr('placeholder',"AUTHOR ID");
+                }
+                else if(radioValue==="e"){
+                    $("input[name='ORCID']:text").attr('placeholder',"EID");
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="Heading">
+
+        <i class="fas fa-scroll icon"></i>
+        <span style="padding: 5px;">Scopus Citation Updater</span>
+
+    </div>
+    <div class="Heading-light">
+        <span>Search for citation</span>
+    </div>
+
+    <div class="container form-div" id="wait_pls" style="visibility: hidden;">Your file is loading... Please wait...</div>
+
+    <div class="container form-div">
+        <form class="name-search" id="filehandled" action="http://localhost:5000/uploader" method="POST" enctype="multipart/form-data">
+            <div>Uplaoad CSV</div>
+            <div class="block">
+                <div class="element">
+                    <input type="file" name="file" class="btn btn-primary" placeholder="CSV file" /><br><br>
+                    <input type="radio" name="options" id="option1" value="p" checked> PDF <br>
+                    <input type="radio" name="options" id="option2" value="c"> CSV <br>
+                </div>
+            </div>
+            <div class="block">
+                <div class="btn-element">
+                    <input type="submit" class="btn btn-primary" value="Generate" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+
+
+    <div class="container form-div">
+        <form class="name-search">
+            <div>Individual Author Search</div>
+            <div class="block">
+                <div class="element">
+                    <input type="text" class="txt-input" name="ORCID" id="ORCID" placeholder="ORCID" /><br><br>
+                    <input type="radio" name="gender" id="i1" value="o" checked> ORCID <br>
+                    <input type="radio" name="gender" id="i2" value="a"> AUTHOR ID <br>
+                    <input type="radio" name="gender" id="i3" value="e"> EID <br>
+                </div>
+            </div>
+            <div class="block">
+                <div class="btn-element">
+                    <button class="btn btn-primary" type="button" id="go">Go</button>
+                </div>
+            </div>
+        </form>
+        <div id="src"></div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#ADD").click(function () {
+                $.getJSON("http://localhost:5000/insertFaculty", {
+                        orcid: $('#NEWID').val(),
+                        name:$('#NEWNAME').val()
+                    },
+                    function (data) {
+                        if (data.result.stat === "success") {
+                            
+                            alert("Value Added ")
+                        } else {
+                            alert("ID invalid")
+                        }
+                    });
+            })
+        })
+    </script>
+
+    
+
+
+    
+
+    {% if data and label%}
+    <div class="container form-div">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <div class="name-search">
+            <div>Citation count graph</div>
+            <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                    {% for item in label %}
+                    "{{item}}",
+                    {% endfor %}
+                    ],
+                    datasets: [{% for value in data %}
+                        {
+                        label: "{{value.name}}",
+                        data: [ {%for i in value.data%} {{i}}, {%endfor%} ] ,
+
+                        backgroundColor: 
+                            'rgba(255,255,255,0)',
+                        borderColor: 
+                            '{{value.colour}}',
+                    
+                        borderWidth: 3
+                    },
+                    {% endfor %}]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="container form-div">
+        <form id="table_interface" class="name-search" action="http://localhost:5000/getripo" method="POST">
+            <div class="block" style="width: 100%;">
+                <div class="element">
+                    <button class="btn btn-primary" type="button" id="updateble">Update Database</button>
+                    <input type="submit" class="btn btn-primary" value="Get from Database" />
+                    <a href="http://localhost:5000/chart">
+                        <button class="btn btn-primary" type="button">Show Progress Chart</button>
+                    </a>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
+    <div class="container form-div">
+        <form class="name-search">
+            <div>Add New Database Entry</div>
+            <div class="block">
+                <div class="element">
+                    <input type="text" class="txt-input" name="NEWID" id="NEWID" placeholder="ORCID" /><br><br>
+                    <input type="text" class="txt-input" name="NEWNAME" id="NEWNAME" placeholder="NAME" /><br><br>
+                </div>
+            </div>
+            <div class="block">
+                <div class="btn-element">
+                    <button class="btn btn-primary" type="button" id="ADD">ADD</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>

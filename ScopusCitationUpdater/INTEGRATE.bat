@@ -1,0 +1,9 @@
+echo Beginning continuous integration...
+start python Pandassupported.py
+echo Starting Automated Unit Testing...
+python test_AuthorRetrieval.py
+echo Unit Tests completed!
+echo Starting Automated UI Testing...
+uitest.jar
+git commit -m "Committed by Continuous Integration Scripts"
+git push origin master
